@@ -1,4 +1,8 @@
 {
   "name": "tstimelines",
-  "packageManager": "yarn@4.1.0"
+  "type": "module",
+  "packageManager": "yarn@4.1.0",
+  "dependencies": {
+    "got": "^14.2.0"
+  }
 }
