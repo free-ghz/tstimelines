@@ -1,5 +1,5 @@
-import got from 'got'
 import { promises as fs } from 'fs'
+import got from 'got'
 
 let baseUrl = "http://192.168.1.175:8080/v1"
 let engine = "mistral7"
@@ -26,9 +26,10 @@ function completeStream(text, tokens) {
     let request = {
         prompt: text,
         max_tokens: tokens,
-        temperature: 1,
+        temperature: 1.05,
         top_k: 40,
-        top_p: 1,
+        top_p: 0.9,
+        frequency_penalty: 0.1,
         stream: true
     }
     let stream = got.stream.post(url, {
@@ -72,13 +73,40 @@ async function makeChat(chat, tokens) {
     return res
 }
 
+async function readPrimers() {
+    let primers = []
+    let primertxt = await fs.readFile("primer.txt", 'utf8')
+    primertxt
+        .split("\n")
+        .filter(row => row.startsWith("^"))
+        .forEach(primer => {
+            let parts = primer.split("^")
+            primers.push({
+                key: parts[1].trim(),
+                prompt: parts[2].trim()
+            })
+        })
+    return primers
+}
+
 async function run() {
-    let primer = await fs.readFile("primer.txt", 'utf8')
+    let primers = await readPrimers()
+    
+    for (let primer of primers) {
+        console.log("\n\n∑", primer.key)
+        let primerResponse = await completeStream(primer.prompt, 100)
+        primer.response = primerResponse.text.trim()
+        console.log("\n\n†   (Done.) reason:", primerResponse.finish_reason)
+    }
+
+
     let promptTemplate = await fs.readFile("prompt.txt", 'utf8')
-    let primerResponse = await completeStream(primer, 400)
-    console.log("\n\n∑   (Done.) reason:", primerResponse.finish_reason)
-    let prompt = promptTemplate.replace("€", primerResponse.text)
-    let promptResponse = (await completeStream(prompt, 9999))
+    let prompt = promptTemplate
+    primers.forEach(primer => {
+        prompt = promptTemplate.replace("^" + primer.key + "^", primer.response)
+    })
+    console.log("\n\n∑")
+    let promptResponse = (await completeStream(prompt, 1000))
     console.log("\n\n∑   (Done.) reason:", promptResponse.finish_reason)
 }
 
