@@ -1,8 +1,7 @@
 import { promises as fs } from 'fs'
 import got from 'got'
 
-let baseUrl = "http://192.168.1.175:8080/v1"
-baseUrl = "http://192.168.1.174:8080/v1"
+let baseUrl = "http://neytiri:8080/v1"
 let engine = "falcon40"
 
 async function complete(text, tokens) {
@@ -37,6 +36,7 @@ function completeStream(text, tokens) {
         json: request
     })
     let completeText = ""
+    let previous = ""
     return new Promise((resolve, reject) => {
         let handleJson = (json) => {
             if (json == '') return
@@ -44,25 +44,28 @@ function completeStream(text, tokens) {
             let finishReason = "dunno"
             let reachedEnd = false
             try {
+                json = previous + json
                 let {text, reached_end, finish_reason} = JSON.parse(json)
+                previous = ""
                 newText = text
                 finishReason = finish_reason
                 reachedEnd = reached_end
+                completeText += newText
+                process.stdout.write(newText)
+                if (reachedEnd) {
+                    resolve({
+                            finish_reason: finishReason,
+                            text: completeText
+                    })
+                }
             } catch(e) {
-                console.log("\nAllright, json error, storing the whole thing, sorry.")
-                newText = json
-                reachedEnd = true
-                // TODO should maybe reject here?
-            }
-            completeText += newText
-            process.stdout.write(newText)
-            if (reachedEnd) {
-                resolve({
-                        finish_reason: finishReason,
-                        text: completeText
-                })
+                // if there's an error, likely we just received part of a json object.
+                // store it and combine with next
+                console.log('°')
+                previous += json
             }
         }
+        
         stream.on("data", async res => {
             let incomingBuffer = Buffer.from(res)
             let text = ""
