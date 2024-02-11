@@ -2,7 +2,8 @@ import { promises as fs } from 'fs'
 import got from 'got'
 
 let baseUrl = "http://192.168.1.175:8080/v1"
-let engine = "mistral7"
+baseUrl = "http://192.168.1.174:8080/v1"
+let engine = "falcon40"
 
 async function complete(text, tokens) {
     let url = baseUrl + "/engines/" + engine + "/completions"
@@ -39,19 +40,38 @@ function completeStream(text, tokens) {
     return new Promise((resolve, reject) => {
         let handleJson = (json) => {
             if (json == '') return
-            let {text, reached_end, finish_reason} = JSON.parse(json)
-            completeText += text
-            process.stdout.write(text)
-            if (reached_end) {
+            let newText = ""
+            let finishReason = "dunno"
+            let reachedEnd = false
+            try {
+                let {text, reached_end, finish_reason} = JSON.parse(json)
+                newText = text
+                finishReason = finish_reason
+                reachedEnd = reached_end
+            } catch(e) {
+                console.log("\nAllright, json error, storing the whole thing, sorry.")
+                newText = json
+                reachedEnd = true
+                // TODO should maybe reject here?
+            }
+            completeText += newText
+            process.stdout.write(newText)
+            if (reachedEnd) {
                 resolve({
-                        finish_reason: finish_reason,
+                        finish_reason: finishReason,
                         text: completeText
                 })
             }
         }
         stream.on("data", async res => {
-            let incoming = Buffer.from(res).toString("utf-8")
-            let inArray = incoming.split("\n\n")
+            let incomingBuffer = Buffer.from(res)
+            let text = ""
+            try {
+                text += incomingBuffer.toString("utf-8")
+            } catch (e) {
+                console.log("\n\n last part of buffer weird. sorry")
+            }
+            let inArray = text.split("\n\n")
             inArray.forEach(handleJson)
         })
     })
