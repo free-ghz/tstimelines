@@ -34,6 +34,7 @@ function textsynthInstance(baseUrl, engine) {
                     completeText += newText
                     process.stdout.write(newText)
                     if (reachedEnd) {
+                        console.log() // since we do proccess..write
                         resolve({
                                 finish_reason: finishReason,
                                 text: completeText
