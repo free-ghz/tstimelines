@@ -1,0 +1,27 @@
+- title: nausicaa
+  prompt: |-
+    Nausicaä has the most wonderful clothes. The way the saltwater wind hits her legs... The weird gloves...
+    
+    Her gloves
+  top_k: 5
+  max_tokens: 20
+
+- title: willNotRun
+  prompt: this will not run because it has unfulfilled requirements.
+  requires:
+    - nausicaa
+    - gloves
+    - svennis
+
+- title: yeast
+  disabled: true
+  prompt: this prompt won't run either, because it has a "disabled" key.
+
+- title: gloves
+  prompt: |-
+    Madmen like to speak about nausicas gloves, saying things like ^nausicaa^. Mmmf, not so good.
+
+    Anyway, this prompt will run after the nausicaa one, becuase it declares it as required. The nausicaa within carets or whatever ^ is called will be replaced with the output of the nausicaa prompt.
+  max_tokens: 20
+  requires:
+    - nausicaa

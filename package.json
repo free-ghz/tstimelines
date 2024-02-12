@@ -3,6 +3,7 @@
   "type": "module",
   "packageManager": "yarn@4.1.0",
   "dependencies": {
-    "got": "^14.2.0"
+    "got": "^14.2.0",
+    "yaml": "^2.3.4"
   }
 }

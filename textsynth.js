@@ -1,17 +1,18 @@
 import got from 'got'
 
+let defaultRequest = {
+    max_tokens: 50,
+    temperature: 1.05,
+    top_k: 40,
+    top_p: 0.9,
+    frequency_penalty: 0.1,
+    stream: true
+}
+
 function textsynthInstance(baseUrl, engine) {
-    function completeStream(text, maxTokens) {
+    function completeStream(userPrompt, maxTokens) {
         let url = baseUrl + "/engines/" + engine + "/completions"
-        let request = {
-            prompt: text,
-            max_tokens: maxTokens,
-            temperature: 1.05,
-            top_k: 40,
-            top_p: 0.9,
-            frequency_penalty: 0.1,
-            stream: true
-        }
+        let request = {...defaultRequest, ...userPrompt}
         let stream = got.stream.post(url, {
             json: request
         })
