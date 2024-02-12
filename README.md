@@ -15,6 +15,8 @@ yarn
 yarn node index
 ```
 
+You should edit the URL to the server in `index.js` to one that isn't accessible only from my local network.
+
 To specify prompts, place YAML files in the `prompts/` directory. Multiple prompts can be placed in the same file, and/or spread over several files. They should follow this format:
 
 ```yaml
@@ -29,6 +31,8 @@ To specify prompts, place YAML files in the `prompts/` directory. Multiple promp
     We write to you today, because
   top_k: 200
   max_tokens: 200
+  requires:
+    - some prompt
 ```
 
 Further examples in `prompts/promt.yaml.example`.
