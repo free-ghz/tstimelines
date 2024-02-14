@@ -82,7 +82,7 @@ function schedule(unorderedPrompts) {
     return orderedPrompts
 }
 
-async function runOrder(orderedPrompts, model) {
+async function runOrder(orderedPrompts, model, store) {
     for (let prompt of orderedPrompts) {
         prompt.requires && prompt.requires.forEach(required => {
             prompt.prompt = prompt.prompt.replace(
@@ -91,6 +91,9 @@ async function runOrder(orderedPrompts, model) {
             )
         })
         prompt.response = await model(prompt)
+        if (prompt.store == undefined || prompt.store) {
+            store(prompt)
+        }
     }
 }
 
