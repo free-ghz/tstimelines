@@ -1,0 +1,24 @@
+services:
+  textsynth:
+    build: ./ts_server_free-2024-01-20
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./falcon_40B_q4.bin:/opt/textsynth/falcon_40B_q4.bin
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/v1/engines"]
+      interval: 60s
+      timeout: 10s
+      retries: 12
+      start_period: 10m
+
+  tstimelines:
+    build: ./tstimelines
+    command: --base http://textsynth:8080/v1 --batch
+    depends_on:
+      textsynth:
+        condition: service_healthy
+    volumes:
+      - ./prompts:/opt/tstimelines/prompts
+      - ./output:/opt/tstimelines/output
+
