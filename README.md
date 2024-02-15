@@ -15,7 +15,7 @@ yarn
 yarn node index
 ```
 
-You should edit the URL to the server in `index.js` to one that isn't accessible only from my local network.
+Pass `--base string` for baseurl and `--model string` for model name, like so: `yarn node index --base http://neytiri:8080/v1 --model falcon40`.
 
 To specify prompts, place YAML files in the `prompts/` directory. Multiple prompts can be placed in the same file, and/or spread over several files. They should follow this format:
 
@@ -35,4 +35,6 @@ To specify prompts, place YAML files in the `prompts/` directory. Multiple promp
     - some prompt
 ```
 
-Further examples in `prompts/promt.yaml.example`.
+Further prompt examples in `prompts/promt.yaml.example`.
+
+Default script behaviour is to run each prompt once, and then exit. Pass `--batch` to loop around the prompt list foreveer. Each loop re-reads the `prompts/` directory, meaning you could edit the prompt definitions between loops without restarting the script.
