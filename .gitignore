@@ -15,4 +15,5 @@
 #hehe
 /*.txt
 output/*.txt
+output/**/*.txt
 prompts/*.yaml
