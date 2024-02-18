@@ -25,3 +25,7 @@
   max_tokens: 20
   requires:
     - nausicaa
+
+- title: paris
+  prompt: when you're all alone in paris
+  store: false #don't write this to disk, since its output is just meant for another prompt

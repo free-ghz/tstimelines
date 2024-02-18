@@ -91,9 +91,7 @@ async function runOrder(orderedPrompts, model, store) {
             )
         })
         prompt.response = await model(prompt)
-        if (prompt.store == undefined || prompt.store) {
-            store(prompt)
-        }
+        store(prompt)
     }
 }
 

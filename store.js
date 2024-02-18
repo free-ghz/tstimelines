@@ -36,16 +36,20 @@ function ensureDirectoryExists(base) {
 }
 
 function store(prompt) {
-    console.log("Writing", prompt.title, "response to disk")
-    ensureDirectoryExists(prompt.title)
+    if (prompt.store == undefined || prompt.store == true) {
+        console.log("Writing", prompt.title, "response to disk")
+        ensureDirectoryExists(prompt.title)
 
-    let frontmatter = "-- finish reason: " + prompt.response.finish_reason
-    frontmatter += "\n-- generated: " + new Date().toString()
-    frontmatter += "\n-- duration: " + Math.round(prompt.response.duration / 60) + " min"
-    
-    let text = `${frontmatter}\n\n${prompt.response.text}\n`
-    let version = getNextVersion(prompt.title)
-    fs.promises.writeFile(`./output/${prompt.title}/${prompt.title}${version}.txt`, text, 'utf8')
+        let frontmatter = "-- finish reason: " + prompt.response.finish_reason
+        frontmatter += "\n-- generated: " + new Date().toString()
+        frontmatter += "\n-- duration: " + Math.round(prompt.response.duration / 60) + " min"
+        
+        let text = `${frontmatter}\n\n${prompt.response.text}\n`
+        let version = getNextVersion(prompt.title)
+        fs.promises.writeFile(`./output/${prompt.title}/${prompt.title}${version}.txt`, text, 'utf8')
+    } else {
+        console.log("Won't write ", prompt.title, "response to disk since it told me not to.")
+    }
 }
 
 export default store
