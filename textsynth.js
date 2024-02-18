@@ -10,7 +10,8 @@ let defaultRequest = {
 }
 
 function textsynthInstance(baseUrl, engine) {
-    function completeStream(userPrompt, maxTokens) {
+    function completeStream(userPrompt) {
+        let timeBegin = new Date().getTime()
         let url = baseUrl + "/engines/" + engine + "/completions"
         let request = {...defaultRequest, ...userPrompt}
         let stream = got.stream.post(url, {
@@ -37,7 +38,8 @@ function textsynthInstance(baseUrl, engine) {
                         console.log() // since we do proccess..write
                         resolve({
                                 finish_reason: finishReason,
-                                text: completeText
+                                text: completeText,
+                                duration: (new Date().getTime() - timeBegin)/1000
                         })
                     }
                 } catch(e) {
