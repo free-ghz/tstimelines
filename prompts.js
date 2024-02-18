@@ -3,7 +3,7 @@ import fs from 'fs'
 
 
 async function read() {
-    console.log("reading prompt yamls...")
+    console.log("Reading prompt yamls...")
     let files = await fs.promises.readdir('./prompts/')
     let yamls = files
         .filter(filename => { return filename.endsWith('.yaml') })
@@ -15,28 +15,28 @@ async function read() {
             let prompts = parse(yaml)
             allPrompts = [...allPrompts, ...prompts]
         } catch (e) {
-            console.log("error when parsing yaml")
+            console.log("Error when parsing yaml", e)
         }
     })
 
-    console.log("validating prompts...")
+    console.log("Validating prompts...")
     allPrompts = allPrompts.filter(prompt => {
         if (!(prompt.title)) {
-            console.log("Prompt without title.")
+            console.log("Ignoring a prompt without title.")
             return false
         }
         if (!(prompt.prompt)) {
-            console.log("Prompt", prompt.title, "without a prompt??")
+            console.log("Ignoring prompt", prompt.title, "without a prompt??")
             return false
         }
         if (prompt.disabled) {
-            console.log("Prompt", prompt.title, "has 'disabled' key")
+            console.log("Ignoring disabled prompt", prompt.title)
             return false
         }
         if (prompt.requires) {
             for (let required of prompt.requires) {
                 if (allPrompts.filter(p => p.title == required && !(p.disabled)).length == 0) {
-                    console.log("Prompt", prompt.title, "requires missing or disabled prompt", required)
+                    console.log("Prompt", prompt.title, "requires missing or disabled prompt", required, ", ignoring it.")
                     return false
                 } 
             }
@@ -49,13 +49,13 @@ async function read() {
 
 function schedule(unorderedPrompts) {
     let prompts = [...unorderedPrompts]
-    console.log("establishing prompt order")
+    console.log("Establishing prompt order")
     let orderedPrompts = []
     do {
         let lengthBefore = orderedPrompts.length
         promptlist: for (let prompt of prompts) {
             if (!(prompt.requires) || (prompt.requires.length && prompt.requires.length == 0)) {
-                console.log(prompt.title, "has no requirements")
+                console.log(orderedPrompts.length + 1, "-", prompt.title, ": has no requirements")
                 orderedPrompts.push(prompt)
             } else {
                 for (let requirement of prompt.requires) {
@@ -63,7 +63,7 @@ function schedule(unorderedPrompts) {
                         continue promptlist
                     }
                 }
-                console.log(prompt.title, "has all requirements fulfilled:", prompt.requires)
+                console.log(orderedPrompts.length + 1, "-", prompt.title, ": now has all requirements fulfilled:", prompt.requires)
                 orderedPrompts.push(prompt)
             }
         }
@@ -74,7 +74,7 @@ function schedule(unorderedPrompts) {
         
         let lengthAfter = orderedPrompts.length
         if (lengthBefore == lengthAfter) {
-            console.log("can't order", prompts.map(p => p.title), "disregarding.")
+            console.log("Can't order", prompts.map(p => p.title), "disregarding.")
             break
         }
     } while (prompts.length > 0)

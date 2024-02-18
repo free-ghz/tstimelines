@@ -48,7 +48,7 @@ function store(prompt) {
         let version = getNextVersion(prompt.title)
         fs.promises.writeFile(`./output/${prompt.title}/${prompt.title}${version}.txt`, text, 'utf8')
     } else {
-        console.log("Won't write ", prompt.title, "response to disk since it told me not to.")
+        console.log("Instructed not to write", prompt.title, "response to disk.")
     }
 }
 

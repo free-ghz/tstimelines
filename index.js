@@ -8,7 +8,7 @@ let defaultModel = "falcon40"
 let config = readParams()
 console.log(config)
 
-let model = textsynth(config.base, config.model)
+let model = textsynth(config.base, config.model, config.batched)
 
 function readParams() {
     let batched = process.argv.includes("--batch")

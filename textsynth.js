@@ -9,7 +9,7 @@ let defaultRequest = {
     stream: true
 }
 
-function textsynthInstance(baseUrl, engine) {
+function textsynthInstance(baseUrl, engine, batch) {
     function completeStream(userPrompt) {
         let timeBegin = new Date().getTime()
         let url = baseUrl + "/engines/" + engine + "/completions"
@@ -33,9 +33,9 @@ function textsynthInstance(baseUrl, engine) {
                     finishReason = finish_reason
                     reachedEnd = reached_end
                     completeText += newText
-                    process.stdout.write(newText)
+                    if (!batch) process.stdout.write(newText)
                     if (reachedEnd) {
-                        console.log() // since we do proccess..write
+                        if (!batch) console.log() // since we do proccess..write
                         resolve({
                                 finish_reason: finishReason,
                                 text: completeText,
@@ -45,7 +45,6 @@ function textsynthInstance(baseUrl, engine) {
                 } catch(e) {
                     // if there's an error, likely we just received part of a json object.
                     // store it and combine with next
-                    console.log('°')
                     previous += json
                 }
             }
@@ -56,7 +55,7 @@ function textsynthInstance(baseUrl, engine) {
                 try {
                     text += incomingBuffer.toString("utf-8")
                 } catch (e) {
-                    console.log("\n\n last part of buffer weird. sorry")
+                    if (!batch) console.log("\n\n last part of buffer weird. sorry")
                 }
                 let inArray = text.split("\n\n")
                 inArray.forEach(handleJson)

@@ -39,4 +39,4 @@ Further prompt examples in `prompts/promt.yaml.example`.
 
 Default script behaviour is to run each prompt once, and then exit. Pass `--batch` to loop around the prompt list forever. Each loop re-reads the `prompts/` directory, meaning you could edit the prompt definitions between loops without restarting the script.
 
-Output is stored in `output/` directory, sorted by prompt `title` property, as well as streamed to stdout.
+Output is stored in `output/` directory, sorted by prompt `title` property. When not in batch mode, it is streamed to stdout as well.
