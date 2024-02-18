@@ -29,3 +29,11 @@
 - title: paris
   prompt: when you're all alone in paris
   store: false #don't write this to disk, since its output is just meant for another prompt
+
+- title: wiseman
+  requires:
+    - paris
+  prompt:|
+    Here, we fetch first the PROMPT from paris by surrounding it in infinity signs - then print the output of it.
+
+    Some people say that ∞paris∞^paris^

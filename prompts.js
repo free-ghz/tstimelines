@@ -89,6 +89,10 @@ async function runOrder(orderedPrompts, model, store) {
                 `^${required}^`,
                 orderedPrompts.filter(p => p.title == required)[0].response.text
             )
+            prompt.prompt = prompt.prompt.replace(
+                `∞${required}∞`,
+                orderedPrompts.filter(p => p.title == required)[0].prompt
+            )
         })
         prompt.response = await model(prompt)
         store(prompt)
