@@ -1,6 +1,7 @@
 import { parse } from 'yaml'
 import fs from 'fs'
-
+import crypto from 'crypto'
+const md5 = data => crypto.createHash('md5').update(data).digest("hex")
 
 async function read() {
     console.log("Reading prompt yamls...")
@@ -29,6 +30,7 @@ async function read() {
             console.log("Ignoring prompt", prompt.title, "without a prompt??")
             return false
         }
+        prompt.md5 = md5(prompt.prompt)
         if (prompt.disabled) {
             console.log("Ignoring disabled prompt", prompt.title)
             return false

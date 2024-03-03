@@ -43,6 +43,7 @@ function store(prompt) {
         let frontmatter = "-- finish reason: " + prompt.response.finish_reason
         frontmatter += "\n-- generated: " + new Date().toString()
         frontmatter += "\n-- duration: " + Math.round(prompt.response.duration / 60) + " min"
+        frontmatter += "\n-- prompt md5: " + prompt.md5
         
         let text = `${frontmatter}\n\n${prompt.response.text}\n`
         let version = getNextVersion(prompt.title)
