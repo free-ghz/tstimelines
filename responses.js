@@ -2,7 +2,35 @@ import fs from 'fs'
 import { v4 as uuid } from 'uuid'
 import yaml from 'yaml'
 
-let inmem = []
+let inMemoryList = []
+
+async function init() {
+    console.log("Initializing response store")
+    let disk = await readFromDisk()
+    disk.forEach(prompt => inMemoryList.push(prompt))
+    console.log("Initialized response store.")
+}
+
+async function readFromDisk() {
+    console.log("Reading response yamls...")
+    let files = await fs.promises.readdir('./output/', {recursive: true})
+
+    let yamls = files
+        .filter(filename => { return filename.endsWith('.yaml') })
+        .map(filename => fs.readFileSync('./output/' + filename, 'utf8'))
+    
+    let responses = []
+    yamls.forEach(text => {
+        try {
+            let response = yaml.parse(text)
+            responses.push(response)
+        } catch (e) {
+            console.log("Error when parsing yaml", e)
+        }
+    })
+
+    return responses
+}
 
 function ensureDirectoryExists(base) {
     let dir = `./output/${base}`;
@@ -21,7 +49,7 @@ function store(response) {
 
     let output = yaml.stringify(response)
 
-    fs.promises.writeFile(`./output/${response.prompt}/${response.id}.txt`, output, 'utf8')
+    fs.promises.writeFile(`./output/${response.prompt}/${response.id}.yaml`, output, 'utf8')
 }
 
 function create(response, prompt) {
@@ -37,4 +65,8 @@ function create(response, prompt) {
     }
 }
 
-export default { store, create }
+function list() {
+    return inMemoryList
+}
+
+export default { store, create, list, init }

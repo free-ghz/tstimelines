@@ -3,7 +3,16 @@ import fs from 'fs'
 import crypto from 'crypto'
 const md5 = data => crypto.createHash('md5').update(data).digest("hex")
 
-async function read() {
+let inMemoryList = []
+
+async function init() {
+    console.log("Initializing prompts store")
+    let disk = await readFromDisk()
+    disk.forEach(prompt => inMemoryList.push(prompt))
+    console.log("Initialized prompts store.")
+}
+
+async function readFromDisk() {
     console.log("Reading prompt yamls...")
     let files = await fs.promises.readdir('./prompts/')
     let yamls = files
@@ -84,4 +93,8 @@ function schedule(unorderedPrompts) {
     return orderedPrompts
 }
 
-export default { read, schedule }
+function list() {
+    return inMemoryList
+}
+
+export default { init, list, schedule }

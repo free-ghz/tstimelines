@@ -31,9 +31,13 @@ function readParams() {
 }
 
 async function run() {
+    await prompts.init()
+    await responses.init()
 
-    while (true) {
-        let allPrompts = await prompts.read()
+    api(config.port)
+    
+    while (false) {
+        let allPrompts = prompts.list()
         let orderedPrompts = prompts.schedule(allPrompts)
         await runner.runOrder(orderedPrompts, async prompt => {
             console.log("Running prompt", prompt.title)
@@ -47,5 +51,3 @@ async function run() {
 }
 
 run()
-
-api(config.port)
