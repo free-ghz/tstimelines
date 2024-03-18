@@ -1,6 +1,6 @@
 import textsynth from './textsynth.js'
 import prompts from './prompts.js'
-import store from './store.js'
+import responses from './responses.js'
 import api from './api.js'
 
 let defaultBaseUrl = "http://neytiri:8080/v1";
@@ -37,15 +37,14 @@ async function run() {
         await prompts.runOrder(orderedPrompts, async prompt => {
             console.log("Running prompt", prompt.title)
             return await model(prompt)
-        }, async prompt => {
-            store(prompt)
         })
         if (!config.batched) {
-            console.log(orderedPrompts)
+            console.log("Run stop.")
             break
         }
     }
 }
 
 run()
+
 api(config.port)
