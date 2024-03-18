@@ -42,7 +42,7 @@ function ensureDirectoryExists(base) {
 
 function store(response) {
     console.log("writeresponse.")
-    inmem.push(response)
+    inMemoryList.push(response)
 
     console.log("Writing", response.prompt, "response to disk")
     ensureDirectoryExists(response.prompt)
@@ -65,8 +65,17 @@ function create(response, prompt) {
     }
 }
 
-function list() {
-    return inMemoryList
+function list(filters) {
+    if (filters == undefined) {
+        return inMemoryList
+    }
+    let filteredList = inMemoryList
+    for (let filter of filters) {
+        filteredList = filteredList.filter(prompt => {
+            return prompt[filter.key] == filter.text
+        })
+    }
+    return filteredList
 }
 
 export default { store, create, list, init }

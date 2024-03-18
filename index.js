@@ -36,7 +36,7 @@ async function run() {
 
     api(config.port, prompts, responses)
     
-    while (false) {
+    while (true) {
         let allPrompts = prompts.list()
         let orderedPrompts = prompts.schedule(allPrompts)
         await runner.runOrder(orderedPrompts, async prompt => {

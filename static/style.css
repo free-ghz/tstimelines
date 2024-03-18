@@ -2,9 +2,12 @@ h1, h2, h3, pre {
     margin: 0;
     padding: 0;
 }
+h3 {
+    text-transform: capitalize;
+}
 .site {
     display: grid;
-    grid-template-columns: 200px auto;
+    grid-template-columns: 200px 400px auto;
     gap:20px;
 }
 .prompts {
@@ -17,5 +20,9 @@ h1, h2, h3, pre {
 }
 .promptmeat {
     background-color: #ff0;
+    display: table;
+}
+.responsemeat {
+    background-color: #0ff;
     display: table;
 }

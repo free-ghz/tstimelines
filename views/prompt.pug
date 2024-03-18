@@ -1,4 +1,7 @@
 div.prompt
-    h3 Prompt: #{prompt.title}
+    h3= prompt.title
     div.promptmeat
         pre= prompt.prompt
+    div.responses
+        each response in responses
+            button(hx-get="/responses/" + response.id, hx-target=".display")= response.id
