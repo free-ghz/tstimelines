@@ -34,7 +34,7 @@ async function run() {
     await prompts.init()
     await responses.init()
 
-    api(config.port)
+    api(config.port, prompts, responses)
     
     while (false) {
         let allPrompts = prompts.list()

@@ -1,18 +1,13 @@
 <!doctype html>
 <html>
 head
-    title Web mmm.
-    style.
-        div {
-            font-size: 0.7em;
-            margin-left:5px;
-        }
+    title Tstimelines
+    link(rel="stylesheet", href="style.css")
 body
-    h1 Helo wold
-    p It's website!
-    h2 htmx
-    div
-        p(hx-get="/", hx-swap="outerHTML") clicker
+    h1 Tstimelines
+    div.site
+        div.prompts(hx-get="/prompts", hx-trigger="load", hx-swap="outerHTML")
+        div.stage
 
     script(src="./htmx.min.js", type="text/javascript")
 </html>

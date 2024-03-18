@@ -93,8 +93,17 @@ function schedule(unorderedPrompts) {
     return orderedPrompts
 }
 
-function list() {
-    return inMemoryList
+function list(filters) {
+    if (filters == undefined) {
+        return inMemoryList
+    }
+    let filteredList = inMemoryList
+    for (let filter of filters) {
+        filteredList = filteredList.filter(prompt => {
+            return prompt[filter.key] == filter.text
+        })
+    }
+    return filteredList
 }
 
 export default { init, list, schedule }
