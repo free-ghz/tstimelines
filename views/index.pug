@@ -2,7 +2,17 @@
 <html>
 head
     title Web mmm.
+    style.
+        div {
+            font-size: 0.7em;
+            margin-left:5px;
+        }
 body
     h1 Helo wold
     p It's website!
+    h2 htmx
+    div
+        p(hx-get="/", hx-swap="outerHTML") clicker
+
+    script(src="./htmx.min.js", type="text/javascript")
 </html>
