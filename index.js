@@ -1,4 +1,5 @@
 import textsynth from './textsynth.js'
+import runner from './runner.js'
 import prompts from './prompts.js'
 import responses from './responses.js'
 import api from './api.js'
@@ -34,10 +35,10 @@ async function run() {
     while (true) {
         let allPrompts = await prompts.read()
         let orderedPrompts = prompts.schedule(allPrompts)
-        await prompts.runOrder(orderedPrompts, async prompt => {
+        await runner.runOrder(orderedPrompts, async prompt => {
             console.log("Running prompt", prompt.title)
             return await model(prompt)
-        })
+        }, responses)
         if (!config.batched) {
             console.log("Run stop.")
             break
