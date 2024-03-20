@@ -78,4 +78,9 @@ function list(filters) {
     return filteredList
 }
 
-export default { store, create, list, init }
+function remove(prompt) {
+    inMemoryList.splice(inMemoryList.indexOf(prompt), 1)
+    // TODO: actually remove
+}
+
+export default { store, create, list, init, remove }

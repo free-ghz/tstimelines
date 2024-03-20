@@ -106,4 +106,9 @@ function list(filters) {
     return filteredList
 }
 
-export default { init, list, schedule }
+function remove(prompt) {
+    inMemoryList.splice(inMemoryList.indexOf(prompt), 1)
+    // TODO: actually remove
+}
+
+export default { init, list, schedule, remove }

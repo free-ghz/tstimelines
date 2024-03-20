@@ -1,4 +1,10 @@
 span.responsemeat= response.text
     div.response
+        div.data
+            each stat in stats
+                .statistic
+                    span.statname= stat.name
+                    span.statvalue= stat.val
         <!-- div in a span! it renders good in _my_ browser. -->
         h3= response.id
+        button(hx-delete="/responses/" + response.id, hx-target=".locus") delete

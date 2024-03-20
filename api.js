@@ -7,17 +7,37 @@ function createApi(port, prompts, responses) {
     let promptsTemplate = pug.compileFile('./views/prompts.pug')
     let responseTemplate = pug.compileFile('./views/response.pug')
 
+    let renderPrompt = (prompt) => {
+        let locus = responses.list([{key: "prompt", text: prompt.title}])
+        return locusTemplate({
+            prompt,
+            responses: locus,
+            stats: [
+                {name:"title", val: prompt.title},
+                {name:"md5", val: prompt.md5}
+            ]
+        })
+    }
+
     let api = express()
     api.use(express.static('./static'))
     api.get("/", (request, response) => {
         response.send(indexTemplate())
     })
 
+    api.delete("/responses/:id", (request, response) => {
+        let res = responses.list([{key: "id", text: request.params.id}])[0]
+        let prompt = prompts.list([{
+            key: "title",
+            text: res.prompt
+        }])[0]
+        responses.remove(res)
+        response.send(renderPrompt(prompt))
+    })
+
     api.get("/locus/:title", (request, response) => {
         let prompt = prompts.list([{key: "title", text: request.params.title}])[0]
-        let locus = responses.list([{key: "prompt", text: request.params.title}])
-        let html = locusTemplate({prompt, responses: locus})
-        response.send(html)
+        response.send(renderPrompt(prompt))
     })
 
     api.get("/prompts/", (request, response) => {
@@ -27,7 +47,15 @@ function createApi(port, prompts, responses) {
 
     api.get("/responses/:id", (request, response) => {
         let res = responses.list([{key: "id", text: request.params.id}])[0]
-        let html = responseTemplate({response: res})
+        let html = responseTemplate({
+            response: res,
+            stats: [
+                {name: "finish reason", val: res.finish_reason},
+                {name: "prompt md5", val: res.prompt_md5},
+                {name: "duration", val: Math.round(res.duration / 60) + " min"},
+                {name: "created", val: new Date(res.created)},
+            ]
+        })
         response.send(html)
     })
 

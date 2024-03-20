@@ -5,6 +5,7 @@ body {
     background-image: url("delphi-lg.png");
     background-repeat: no-repeat;
     background-position: bottom right;
+    background-attachment: fixed;
 }
 button {
     background-color: #00000022;
@@ -17,11 +18,7 @@ h1, h2, h3, pre {
     padding: 0;
 }
 h1, h2, h3, * {
-    text-transform: capitalize;
     text-transform: full-width;
-}
-pre {
-    white-space: pre-wrap;
 }
 .site {
     display: grid;
@@ -31,6 +28,7 @@ pre {
 .locus {
     display: grid;
     grid-template-columns: auto 400px;
+    position: relative;
 }
 .prompts {
 }
@@ -46,11 +44,35 @@ pre {
 .responsemeat {
     background-color: #0ff;
 }
+.promptmeat, .responsemeat {
+    text-transform: none;
+    white-space: pre-wrap;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 18px;
+}
 .responses, .display {
     overflow-y: scroll;
 }
 .responses {
-    position: fixed;
+    float:right;
     right: 8px;
     width: 400px; /* that's right */
+}
+.data {
+    margin-bottom:2em;
+    margin-top:2em;
+}
+.statistic {
+    display: flex;
+    flex-direction: row;
+}
+.statname {
+    background-color: #88888811;
+    padding:2px;
+    display: inline-block;
+}
+.statvalue {
+    display: inline-block;
+    border: 1px solid #00000011;
+    margin:1px;
 }
