@@ -1,4 +1,5 @@
 div.prompts
     h3 Prompts
     each prompt in prompts
-        button(hx-get="/prompts/" + prompt.title, hx-target=".stage")= prompt.title
+        button(hx-get="/locus/" + prompt.title, hx-target=".locus")= prompt.title
+div.locus

@@ -3,7 +3,7 @@ import pug from 'pug'
 
 function createApi(port, prompts, responses) {
     let indexTemplate = pug.compileFile('./views/index.pug')
-    let promptTemplate = pug.compileFile('./views/prompt.pug')
+    let locusTemplate = pug.compileFile('./views/locus.pug')
     let promptsTemplate = pug.compileFile('./views/prompts.pug')
     let responseTemplate = pug.compileFile('./views/response.pug')
 
@@ -13,10 +13,10 @@ function createApi(port, prompts, responses) {
         response.send(indexTemplate())
     })
 
-    api.get("/prompts/:title", (request, response) => {
+    api.get("/locus/:title", (request, response) => {
         let prompt = prompts.list([{key: "title", text: request.params.title}])[0]
-        let responsesForPrompt = responses.list([{key: "prompt", text: request.params.title}])
-        let html = promptTemplate({prompt, responses: responsesForPrompt})
+        let locus = responses.list([{key: "prompt", text: request.params.title}])
+        let html = locusTemplate({prompt, responses: locus})
         response.send(html)
     })
 

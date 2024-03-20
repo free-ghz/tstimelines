@@ -5,10 +5,7 @@ head
     link(rel="stylesheet", href="style.css")
 body
     h1 Tstimelines
-    div.site
-        div.prompts(hx-get="/prompts", hx-trigger="load", hx-swap="outerHTML")
-        div.stage
-        div.display
+    div.site(hx-get="/prompts", hx-trigger="load")
 
     script(src="./htmx.min.js", type="text/javascript")
 </html>

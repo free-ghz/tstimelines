@@ -1,14 +1,36 @@
+html {
+    min-height: 100%;
+}
+body {
+    background-image: url("delphi-lg.png");
+    background-repeat: no-repeat;
+    background-position: bottom right;
+}
+button {
+    background-color: #cccccccc;
+    max-width: 100%;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
 h1, h2, h3, pre {
     margin: 0;
     padding: 0;
 }
-h3 {
+h1, h2, h3, * {
     text-transform: capitalize;
+    text-transform: full-width;
+}
+pre {
+    white-space: pre-wrap;
 }
 .site {
     display: grid;
-    grid-template-columns: 200px 400px auto;
+    grid-template-columns: 200px auto;
     gap:20px;
+}
+.locus {
+    display: grid;
+    grid-template-columns: 400px auto;
 }
 .prompts {
 }
