@@ -7,7 +7,7 @@ body {
     background-position: bottom right;
 }
 button {
-    background-color: #cccccccc;
+    background-color: #00000022;
     max-width: 100%;
     white-space: pre-wrap;
     word-wrap: break-word;
@@ -30,7 +30,7 @@ pre {
 }
 .locus {
     display: grid;
-    grid-template-columns: 400px auto;
+    grid-template-columns: auto 400px;
 }
 .prompts {
 }
@@ -42,9 +42,15 @@ pre {
 }
 .promptmeat {
     background-color: #ff0;
-    display: table;
 }
 .responsemeat {
     background-color: #0ff;
-    display: table;
+}
+.responses, .display {
+    overflow-y: scroll;
+}
+.responses {
+    position: fixed;
+    right: 8px;
+    width: 400px; /* that's right */
 }
