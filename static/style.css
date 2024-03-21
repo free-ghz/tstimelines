@@ -73,6 +73,6 @@ h1, h2, h3, * {
 }
 .statvalue {
     display: inline-block;
-    border: 1px solid #00000011;
-    margin:1px;
+    border: 1px solid #00000022;
+    margin:1px 1px 1px 1ch;
 }

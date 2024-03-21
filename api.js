@@ -9,13 +9,21 @@ function createApi(port, prompts, responses) {
 
     let renderPrompt = (prompt) => {
         let locus = responses.list([{key: "prompt", text: prompt.title}])
+
+        let stats = [
+            {name:"title", val: prompt.title},
+            {name:"md5", val: prompt.md5}
+        ]
+        if (prompt.disabled != undefined) {
+                stats.push({name:"disabled 💤", val: prompt.disabled})
+        }
+        if (prompt.invalid != undefined) {
+                stats.push({name:"invalid 💤", val: prompt.invalid})
+        }
         return locusTemplate({
             prompt,
             responses: locus,
-            stats: [
-                {name:"title", val: prompt.title},
-                {name:"md5", val: prompt.md5}
-            ]
+            stats
         })
     }
 

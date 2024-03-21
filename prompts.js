@@ -22,8 +22,8 @@ async function readFromDisk() {
     let allPrompts = []
     yamls.forEach(yaml => {
         try {
-            let prompts = parse(yaml)
-            allPrompts = [...allPrompts, ...prompts]
+            let prompt = parse(yaml)
+            allPrompts.push(prompt)
         } catch (e) {
             console.log("Error when parsing yaml", e)
         }
@@ -40,18 +40,20 @@ async function readFromDisk() {
             return false
         }
         prompt.md5 = md5(prompt.prompt)
-        if (prompt.disabled) {
-            console.log("Ignoring disabled prompt", prompt.title)
-            return false
-        }
-        if (prompt.requires) {
-            for (let required of prompt.requires) {
-                if (allPrompts.filter(p => p.title == required && !(p.disabled)).length == 0) {
-                    console.log("Prompt", prompt.title, "requires missing or disabled prompt", required, ", ignoring it.")
-                    return false
-                } 
+        let changed = false
+        do {
+            changed = false
+            if (prompt.requires && prompt.invalid == null) {
+                for (let required of prompt.requires) {
+                    if (allPrompts.filter(p => p.title == required && !(p.disabled)).length == 0) {
+                        console.log("Prompt", prompt.title, "requires missing or disabled prompt", required, ", ignoring it.")
+                        prompt.invalid = "Requires missing/disabled"
+                        prompt.disabled = true
+                        changed = true
+                    } 
+                }
             }
-        }
+        } while (changed == true) // since disabling one might make another invalid
         return true
     })
 

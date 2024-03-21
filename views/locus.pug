@@ -9,10 +9,6 @@ div.stage
         span.promptmeat= prompt.prompt
         span.responsemeat
 div.responses.display
-    <!-- stor upptäckt nu ang. HTMX det är att ditt 1 objekt kan bli ersatt av mer än ett :o om det verkligen är så så förändrar det allt -->
-    <!-- big discovery in PUG nu det är att jag behöver inte avsluta kommentaren va?
-    | men jag kan pipea in såhär -->
-    <!-- anyway då kan man stoppa in en ny grej UTAN target tag och sen en till tag med rätt target och så göra +1. man kan göra fibonacci typ? -->
     each response in responses
         button(hx-get="/responses/" + response.id, hx-target=".responsemeat", hx-swap="outerHTML")= response.id
 br(style="clear:both;")
