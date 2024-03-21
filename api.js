@@ -4,6 +4,7 @@ import pug from 'pug'
 function createApi(port, prompts, responses) {
     let indexTemplate = pug.compileFile('./views/index.pug')
     let locusTemplate = pug.compileFile('./views/locus.pug')
+    let orphanedTemplate = pug.compileFile('./views/orphaned.pug')
     let promptsTemplate = pug.compileFile('./views/prompts.pug')
     let responseTemplate = pug.compileFile('./views/response.pug')
 
@@ -46,6 +47,11 @@ function createApi(port, prompts, responses) {
     api.get("/locus/:title", (request, response) => {
         let prompt = prompts.list([{key: "title", text: request.params.title}])[0]
         response.send(renderPrompt(prompt))
+    })
+
+    api.get("/orphaned/", (request, response) => {
+        let res = responses.list().filter(res => !prompts.list().map(p => p.title).includes(res.prompt))
+        response.send(orphanedTemplate({responses: res}))
     })
 
     api.get("/prompts/", (request, response) => {

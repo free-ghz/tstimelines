@@ -59,7 +59,7 @@ function create(response, prompt) {
         text: response.text,
         finish_reason: response.finish_reason,
         duration: response.duration,
-        created: new Date().getDate(),
+        created: new Date().getTime(),
         prompt: prompt.title,
         prompt_md5: prompt.md5
     }

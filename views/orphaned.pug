@@ -1,0 +1,11 @@
+div.stage
+    h3 Orphaned responses
+    div.prompt
+        div Responses not belonging to a loaded prompt.
+        span.promptmeat
+            | ???
+        span.responsemeat
+div.responses.display
+    each response in responses
+        button(hx-get="/responses/" + response.id, hx-target=".responsemeat", hx-swap="outerHTML")= response.prompt
+br(style="clear:both;")

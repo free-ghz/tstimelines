@@ -1,5 +1,9 @@
 div.prompts
     h3 Prompts
+    button(hx-get="/new/", hx-target=".locus") ✨new✨
+    button(hx-get="/orphaned/", hx-target=".locus") 🪢orphaned🪢
+    h3 * * * * *
     each prompt in prompts
-        button(hx-get="/locus/" + prompt.title, hx-target=".locus")= prompt.title + (prompt.disabled == undefined ? '' : ' 💤')
+        button(hx-get="/locus/" + prompt.title, hx-target=".locus")
+            | #{prompt.title}#{(prompt.disabled == undefined ? '' : ' 💤')}
 div.locus
