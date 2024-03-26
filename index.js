@@ -1,5 +1,6 @@
 import textsynth from './textsynth.js'
 import runner from './runner.js'
+import runOrder from './runOrder.js'
 import prompts from './prompts.js'
 import responses from './responses.js'
 import api from './api.js'
@@ -35,17 +36,27 @@ async function run() {
     await responses.init()
 
     api(config.port, prompts, responses)
-    
+
+    let allPrompts = prompts.list().filter(p => p.disabled == undefined || p.disabled == false)
+    let currentRun = runOrder.create(allPrompts)
+
     while (true) {
+        while (currentRun.hasNext()) {
+            await currentRun.runNext(async prompt => {
+                await runner.runOrder(prompt, async prompt => {
+                    console.log("Running prompt", prompt.title)
+                    let a = await model(prompt)
+                    return a
+                }, responses)
+            })
+        }
         let allPrompts = prompts.list().filter(p => p.disabled == undefined || p.disabled == false)
-        let orderedPrompts = prompts.schedule(allPrompts)
-        await runner.runOrder(orderedPrompts, async prompt => {
-            console.log("Running prompt", prompt.title)
-            return await model(prompt)
-        }, responses)
-        if (!config.batched) {
-            console.log("Run stop.")
-            break
+        if (allPrompts.length > 0) {
+            currentRun = runOrder.create(allPrompts)
+            continue
+        } else {
+            console.log("°")
+            await new Promise(r => setTimeout(r, 5000));
         }
     }
 }

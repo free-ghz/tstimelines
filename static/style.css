@@ -56,7 +56,8 @@ h1, h2, h3, * {
 .responses {
     float:right;
     right: 8px;
-    width: 400px; /* that's right */
+    width: 380px; /* that's right */
+    padding-left:20px;
 }
 .data {
     margin-bottom:2em;

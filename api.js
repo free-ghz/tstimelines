@@ -41,7 +41,12 @@ function createApi(port, prompts, responses) {
             text: res.prompt
         }])[0]
         responses.remove(res)
-        response.send(renderPrompt(prompt))
+        if (prompt == null) {
+            let res = responses.list().filter(res => !prompts.list().map(p => p.title).includes(res.prompt))
+            response.send(orphanedTemplate({responses: res}))
+        } else {
+            response.send(renderPrompt(prompt))
+        }
     })
 
     api.get("/locus/:title", (request, response) => {

@@ -78,9 +78,10 @@ function list(filters) {
     return filteredList
 }
 
-function remove(prompt) {
-    inMemoryList.splice(inMemoryList.indexOf(prompt), 1)
-    // TODO: actually remove
+function remove(response) {
+    inMemoryList.splice(inMemoryList.indexOf(response), 1)
+    console.log("Removing", response.prompt, "response", response.id)
+    fs.unlink(`./output/${response.prompt}/${response.id}.yaml`)
 }
 
 export default { store, create, list, init, remove }
